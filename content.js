@@ -2,8 +2,8 @@
 
 console.log("PlatePeace content.js loaded");
 
-// Matches calorie patterns like "650 calories", "310 cal", "190 kcal", "(190 calories)."
-const CALORIE_REGEX = /\(?\b\d{2,4}\s*(calories?|cals?|kcals?)\b\.?\)?/gi;
+// Matches calorie patterns like "650 calories", "310 cal", "190 kcal", "(190 calories).", "Calories: 190"
+const CALORIE_REGEX = /\(?\b\d{2,4}\s*(calories?|cals?|kcals?)\b\.?\)?|(calories?|kcals?):\s*\d{2,4}/gi;
 
 // Pass 2 — handles sites like Starbucks that split the number and unit
 // across two sibling elements: <span>190</span><span>calories</span>
@@ -11,13 +11,24 @@ function scrubSplitNodes(root) {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let node;
     while ((node = walker.nextNode())) {
-      if (/^\s*\d{2,4}\s*$/.test(node.textContent)) {
+        const text = node.textContent;
         const nextSibling = node.parentElement?.nextElementSibling;
-        if (nextSibling && /^\s*(calories?|cals?|kcals?)\s*$/i.test(nextSibling.textContent)) {
-          node.textContent = "";
-          nextSibling.style.display = "none";
+    
+        // Pattern A — number first: <span>190</span><span>calories</span>
+        if (/^\s*\d{2,4}\s*$/.test(text)) {
+          if (nextSibling && /^\s*(calories?|cals?|kcals?)\s*$/i.test(nextSibling.textContent)) {
+            node.textContent = "";
+            nextSibling.style.display = "none";
+          }
         }
-      }
+    
+        // Pattern B — label first: <span>Calories: </span><span>350</span>
+        if (/^\s*(calories?|kcals?)\s*:\s*$/i.test(text)) {
+          if (nextSibling && /^\s*\d{2,4}\s*$/.test(nextSibling.textContent)) {
+            node.textContent = "";
+            nextSibling.style.display = "none";
+          }
+        }
     }
   }
   
