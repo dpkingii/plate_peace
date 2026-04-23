@@ -1,5 +1,4 @@
 // content.js — Plate Peace
-
 console.log("PlatePeace content.js loaded");
 
 // Matches calorie patterns like "650 calories", "310 cal", "190 kcal", "(190 calories).", "Calories: 190"
@@ -8,13 +7,19 @@ const CALORIE_REGEX = /\(?\b\d{2,4}\s*(calories?|cals?|kcals?)\b\.?\)?|(calories
 // Pass 2 — handles sites like Starbucks that split the number and unit
 // across two sibling elements: <span>190</span><span>calories</span>
 function scrubSplitNodes(root) {
+
+    // search starting from subtree passed in
+    // walker only stops at nodes with actual text
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let node;
+
     while ((node = walker.nextNode())) {
+
         const text = node.textContent;
         const nextSibling = node.parentElement?.nextElementSibling;
     
         // Pattern A — number first: <span>190</span><span>calories</span>
+        // finds a node that is just a number, then checks if the next sibling is just a calorie word
         if (/^\s*\d{2,4}\s*$/.test(text)) {
           if (nextSibling && /^\s*(calories?|cals?|kcals?)\s*$/i.test(nextSibling.textContent)) {
             node.textContent = "";
@@ -23,6 +28,7 @@ function scrubSplitNodes(root) {
         }
     
         // Pattern B — label first: <span>Calories: </span><span>350</span>
+        // finds the label first, then checks if the next sibling is just a number
         if (/^\s*(calories?|kcals?)\s*:\s*$/i.test(text)) {
           if (nextSibling && /^\s*\d{2,4}\s*$/.test(nextSibling.textContent)) {
             node.textContent = "";
@@ -42,8 +48,12 @@ function scrubSplitNodes(root) {
     // e.g. "Chicken Burrito 650 calories"
     const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
     let current;
+
     while ((current = walker.nextNode())) {
-      if (CALORIE_REGEX.test(current.textContent)) {
+
+      if (CALORIE_REGEX.test(current.textContent)){ 
+        // reset to searach from beginning of string to avoid randomly miss
+        // g flag on regex remembers the last matched position when call test()
         CALORIE_REGEX.lastIndex = 0;
         current.textContent = current.textContent.replace(CALORIE_REGEX, "");
       }
