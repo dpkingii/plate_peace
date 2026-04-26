@@ -1,34 +1,23 @@
 {
-    "manifest_version": 3,
-    "name": "PlatePeace",
-    "version": "1.0.0",
-    "description": "Browse menus peacefully. Calorie numbers are quietly tucked away.",
-    "permissions": [
-      "activeTab",
-      "storage",
-      "scripting",
-      "tabs"
-    ],
-    "host_permissions": [
-      "<all_urls>"
-    ],
-    "action": {
-      "default_popup": "popup/index.html"
-    },
-    "icons": {
-        "16": "/popup/images/icon16.png",
-        "48": "/popup/images/icon48.png",
-        "128": "/popup/images/icon128.png"
-    },
-    "content_scripts": [
-      {
-        "matches": [
-          "<all_urls>"
-        ],
-        "js": [
-          "content.js"
-        ],
-        "run_at": "document_idle"
-      }
-    ]
-  }
+  "manifest_version": 3,
+  "name": "PlatePeace",
+  "version": "1.0.0",
+  "description": "Browse menus peacefully. Calorie numbers are quietly tucked away.",
+  "permissions": ["activeTab", "storage", "scripting", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup/index.html"
+  },
+  "icons": {
+    "16": "/popup/images/icon16.png",
+    "48": "/popup/images/icon48.png",
+    "128": "/popup/images/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

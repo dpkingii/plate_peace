@@ -1,4 +1,3 @@
-
 const mainToggle = document.getElementById("mainToggle");
 const mainRow = document.getElementById("mainRow");
 const mainDesc = document.getElementById("mainDesc");
@@ -8,10 +7,9 @@ chrome.storage.sync.get(["enabled"], (result) => {
   setMainToggle(result.enabled === true);
 });
 
-// Main toggle click 
+// Main toggle click
 mainToggle.addEventListener("click", () => {
-
-  // aria is a html attribute for accessibility (it would announce "toggle button, pressed") 
+  // aria is a html attribute for accessibility (it would announce "toggle button, pressed")
   // also stores the state of the button (pressed or not) so we dont need "let isEnabled = false;"
   // getAttribute returns the value of the attribute (pressed or not) as string
   const newEnabled = mainToggle.getAttribute("aria-pressed") === "false"; // Flip from current aria-pressed
@@ -23,27 +21,26 @@ mainToggle.addEventListener("click", () => {
   sendToActiveTab({ type: "SET_ENABLED", enabled: newEnabled });
 });
 
-// Helpers 
+// Helpers
 function setMainToggle(enabled) {
   mainToggle.setAttribute("aria-pressed", String(enabled));
   mainRow.classList.toggle("active", enabled);
-  mainDesc.textContent = enabled ? "Calorie numbers are hidden" : "Numbers are visible";
+  mainDesc.textContent = enabled
+    ? "Calorie numbers are hidden"
+    : "Numbers are visible";
 }
 
 // Resets when the popup closes — prevents reload loops on aggressive CDNs like Starbucks
 let hasReloaded = false;
 
 function sendToActiveTab(msg) {
-
   // get all active tabs in the current window
   // async, so tabs only exists inside the callback
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-
     if (!tabs[0]?.id) return; // check if undefined, return if so
 
     // send message to content.js
     chrome.tabs.sendMessage(tabs[0].id, msg, () => {
-      
       // callback for after the message is deliever or failed
       // If content.js wasn't injected yet, reload once so it gets injected fresh
       if (chrome.runtime.lastError && msg.enabled && !hasReloaded) {
