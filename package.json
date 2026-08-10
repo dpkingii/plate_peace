@@ -1,7 +1,7 @@
 {
-  "name": "plate_peace",
+  "name": "quietplate",
   "version": "1.0.0",
-  "description": "Browse menus peacefully with PlatePeace chrome extension. Calorie numbers are quietly tucked away.",
+  "description": "Browse menus peacefully with the QuietPlate chrome extension. Calorie numbers are quietly tucked away.",
   "main": "content.js",
   "scripts": {
     "test": "vitest run",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dpkingii/plate_peace.git"
+    "url": "git+https://github.com/dpkingii/quietplate.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dpkingii/plate_peace/issues"
+    "url": "https://github.com/dpkingii/quietplate/issues"
   },
-  "homepage": "https://github.com/dpkingii/plate_peace#readme",
+  "homepage": "https://github.com/dpkingii/quietplate#readme",
   "devDependencies": {
     "jsdom": "^29.1.1",
     "vitest": "^4.1.10"

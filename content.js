@@ -1,4 +1,4 @@
-// content.js — PlatePeace
+// content.js — QuietPlate
 
 // Matches calorie patterns like "650 calories", "310 cal", "190 kcal", "(190 calories).", "Calories: 190"
 const CALORIE_REGEX =

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "PlatePeace",
+  "name": "QuietPlate",
   "version": "1.0.0",
   "description": "Browse menus peacefully. Calorie numbers are quietly tucked away.",
   "permissions": ["activeTab", "storage", "scripting", "tabs"],
