@@ -1,0 +1,25 @@
+{
+  "name": "plate_peace",
+  "version": "1.0.0",
+  "description": "Browse menus peacefully with PlatePeace chrome extension. Calorie numbers are quietly tucked away.",
+  "main": "content.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dpkingii/plate_peace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dpkingii/plate_peace/issues"
+  },
+  "homepage": "https://github.com/dpkingii/plate_peace#readme",
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.10"
+  }
+}
