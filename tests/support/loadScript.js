@@ -38,6 +38,16 @@ function mergeChromeMock(overrides) {
         set: () => {},
         ...overrides.storage?.sync,
       },
+      local: {
+        get: (_keys, cb) => cb({}),
+        set: () => {},
+        ...overrides.storage?.local,
+      },
+      session: {
+        get: (_keys, cb) => cb({}),
+        set: () => {},
+        ...overrides.storage?.session,
+      },
     },
     runtime: {
       onMessage: { addListener: () => {} },
@@ -48,6 +58,7 @@ function mergeChromeMock(overrides) {
       query: (_opts, cb) => cb([{ id: 1 }]),
       sendMessage: (_id, _msg, cb) => cb?.(),
       reload: () => {},
+      create: () => {},
       ...overrides.tabs,
     },
   };

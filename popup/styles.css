@@ -96,6 +96,110 @@ body {
   letter-spacing: -0.01em;
 }
 
+.brand-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Icon buttons (small, single-icon, no pill background) ── */
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--muted);
+  cursor: pointer;
+  outline: none;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.icon-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.icon-btn .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.icon-btn.reported {
+  color: var(--accent);
+}
+
+.icon-btn.disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ── Tooltip (custom, driven by data-tooltip) ── */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after,
+[data-tooltip]::before {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  right: 0;
+  width: max-content;
+  max-width: 150px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  z-index: 10;
+}
+
+[data-tooltip]::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--text);
+  transform: translateY(-4px) rotate(45deg);
+  z-index: 9;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:focus-visible::before {
+  opacity: 1;
+  transform: translateY(0) rotate(45deg);
+}
+
 /* ── Theme switch (small, icon-labeled) ── */
 .theme-switch {
   position: relative;
@@ -194,13 +298,16 @@ body {
   color: #fff;
 }
 
-.power-toggle .icon-leaf {
+.power-toggle .icon-cloche {
   width: 40px;
   height: 40px;
+}
+
+.power-toggle .cloche-dome {
   transition: fill 0.25s ease;
 }
 
-.power-toggle[aria-pressed="true"] .icon-leaf {
+.power-toggle[aria-pressed="true"] .cloche-dome {
   fill: currentColor;
 }
 
@@ -217,3 +324,4 @@ footer {
   font-size: 12px;
   color: var(--muted);
 }
+

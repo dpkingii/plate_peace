@@ -23,21 +23,36 @@
       <header class="brand">
         <span class="brand-name">QuietPlate</span>
 
-        <button
-          class="theme-switch"
-          id="themeToggle"
-          aria-pressed="false"
-          aria-label="Toggle dark mode"
-        >
-          <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-          </svg>
-          <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
-          </svg>
-          <span class="theme-thumb"></span>
-        </button>
+        <div class="brand-actions">
+          <a
+            href="#"
+            id="reportLink"
+            class="icon-btn"
+            aria-label="Numbers still showing? Report this page"
+            data-tooltip="Numbers still showing? Report this page"
+          >
+            <svg class="icon icon-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 3v18" />
+              <path d="M5 4h13l-3.5 4L18 12H5" />
+            </svg>
+          </a>
+
+          <button
+            class="theme-switch"
+            id="themeToggle"
+            aria-pressed="false"
+            aria-label="Toggle dark mode"
+          >
+            <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+            </svg>
+            <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+            </svg>
+            <span class="theme-thumb"></span>
+          </button>
+        </div>
       </header>
 
       <div class="power-wrap">
@@ -47,9 +62,11 @@
           aria-pressed="false"
           aria-label="Toggle calorie filter"
         >
-          <svg class="icon icon-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+          <svg class="icon icon-cloche" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path class="cloche-dome" d="M4 16a8 8 0 0 1 16 0" />
+            <line x1="2.5" y1="16" x2="21.5" y2="16" />
+            <line x1="12" y1="4" x2="12" y2="7" />
+            <circle cx="12" cy="3" r="1" />
           </svg>
         </button>
         <span class="power-label" id="mainDesc">Numbers visible</span>

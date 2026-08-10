@@ -1,6 +1,19 @@
 const mainToggle = document.getElementById("mainToggle");
 const mainDesc = document.getElementById("mainDesc");
 const themeToggle = document.getElementById("themeToggle");
+const reportLink = document.getElementById("reportLink");
+
+// Google Form "Get pre-filled link" values for the report-a-page form.
+const REPORT_FORM_BASE_URL =
+  "https://docs.google.com/forms/d/e/REPLACE_WITH_FORM_ID/viewform";
+const REPORT_FORM_URL_ENTRY = "entry.REPLACE_WITH_ENTRY_ID";
+
+// Soft spam guard — caps reports per rolling window. This only protects the
+// button in the popup; the form itself is a public URL reachable outside the
+// extension, so real abuse protection lives in the form's own settings
+// (e.g. "Limit to 1 response"), not here.
+const REPORT_MAX_PER_WINDOW = 5;
+const REPORT_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 // Cached from the last resolved theme so it can be applied synchronously on
 // the next open, without waiting on the async chrome.storage.sync round trip
@@ -50,7 +63,117 @@ themeToggle.addEventListener("click", () => {
   setTheme(newDark);
 });
 
+// Once clicked, the report icon locks for the rest of the browser session —
+// but only for the site it was reported on, so moving to a different website
+// still offers a fresh report. `reportedHostnames` tracks that per-hostname
+// (storage.session, cleared on browser restart); `reportCapReached` is the
+// separate daily backstop (storage.local, survives restarts, counts across
+// all sites) for someone who restarts the browser specifically to reset the
+// session list.
+let reportedThisHost = false;
+let reportCapReached = false;
+
+function renderReportState() {
+  const locked = reportedThisHost || reportCapReached;
+  reportLink.classList.toggle("reported", reportedThisHost);
+  reportLink.classList.toggle("disabled", locked);
+  reportLink.setAttribute("aria-disabled", String(locked));
+
+  if (reportedThisHost) {
+    reportLink.setAttribute("data-tooltip", "Thanks for reporting this page!");
+  } else if (reportCapReached) {
+    reportLink.setAttribute(
+      "data-tooltip",
+      "You've reported the max for today — thanks for the heads up",
+    );
+  }
+}
+
+// Reflect any earlier reports on open.
+chrome.storage.local.get(["reportTimestamps"], (result) => {
+  reportCapReached =
+    pruneReportTimestamps(result.reportTimestamps || []).length >= REPORT_MAX_PER_WINDOW;
+  renderReportState();
+});
+
+getActiveTabUrl((pageUrl) => {
+  chrome.storage.session.get(["reportedHostnames"], (result) => {
+    reportedThisHost = (result.reportedHostnames || []).includes(hostnameOf(pageUrl));
+    renderReportState();
+  });
+});
+
+// Report-this-page click
+let reportPending = false;
+
+reportLink.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  if (reportLink.classList.contains("disabled") || reportPending) return;
+  reportPending = true;
+
+  chrome.storage.local.get(["reportTimestamps"], (result) => {
+    const recent = pruneReportTimestamps(result.reportTimestamps || []);
+
+    if (recent.length >= REPORT_MAX_PER_WINDOW) {
+      reportCapReached = true;
+      renderReportState();
+      reportPending = false;
+      return;
+    }
+
+    recent.push(Date.now());
+    chrome.storage.local.set({ reportTimestamps: recent });
+
+    getActiveTabUrl((pageUrl) => {
+      chrome.storage.session.get(["reportedHostnames"], (sessionResult) => {
+        const hostnames = sessionResult.reportedHostnames || [];
+        const hostname = hostnameOf(pageUrl);
+
+        if (!hostnames.includes(hostname)) {
+          chrome.storage.session.set({ reportedHostnames: [...hostnames, hostname] });
+        }
+        reportedThisHost = true;
+        renderReportState();
+
+        chrome.tabs.create({ url: buildReportUrl(pageUrl) });
+        reportPending = false;
+      });
+    });
+  });
+});
+
 // Helpers
+function getActiveTab(callback) {
+  // async, so the tab only exists inside the callback
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => callback(tabs[0]));
+}
+
+function getActiveTabUrl(callback) {
+  getActiveTab((tab) => callback(tab?.url || ""));
+}
+
+function hostnameOf(pageUrl) {
+  try {
+    return new URL(pageUrl).hostname;
+  } catch {
+    return pageUrl;
+  }
+}
+
+function buildReportUrl(pageUrl) {
+  const params = new URLSearchParams({
+    usp: "pp_url",
+    [REPORT_FORM_URL_ENTRY]: pageUrl,
+  });
+  return `${REPORT_FORM_BASE_URL}?${params.toString()}`;
+}
+
+function pruneReportTimestamps(timestamps) {
+  const cutoff = Date.now() - REPORT_WINDOW_MS;
+  return timestamps.filter((t) => t > cutoff);
+}
+
 function setMainToggle(enabled) {
   mainToggle.setAttribute("aria-pressed", String(enabled));
   mainDesc.textContent = enabled ? "Numbers hidden" : "Numbers visible";
@@ -66,18 +189,16 @@ function setTheme(isDark) {
 let hasReloaded = false;
 
 function sendToActiveTab(msg) {
-  // get all active tabs in the current window
-  // async, so tabs only exists inside the callback
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (!tabs[0]?.id) return; // check if undefined, return if so
+  getActiveTab((tab) => {
+    if (!tab?.id) return; // check if undefined, return if so
 
     // send message to content.js
-    chrome.tabs.sendMessage(tabs[0].id, msg, () => {
+    chrome.tabs.sendMessage(tab.id, msg, () => {
       // callback for after the message is deliever or failed
       // If content.js wasn't injected yet, reload once so it gets injected fresh
       if (chrome.runtime.lastError && msg.enabled && !hasReloaded) {
         hasReloaded = true;
-        chrome.tabs.reload(tabs[0].id);
+        chrome.tabs.reload(tab.id);
       }
     });
   });
