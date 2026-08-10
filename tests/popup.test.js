@@ -140,9 +140,9 @@ describe("report link", () => {
     expect(create).toHaveBeenCalledOnce();
     const openedUrl = new dom.window.URL(create.mock.calls[0][0].url);
     expect(openedUrl.origin + openedUrl.pathname).toBe(
-      "https://docs.google.com/forms/d/e/REPLACE_WITH_FORM_ID/viewform",
+      "https://docs.google.com/forms/d/e/1FAIpQLSfGZIQhyQ2ppOo9sntp-HOSdMSX1LCwYJX92ed3WVsS6tvJow/viewform",
     );
-    expect(openedUrl.searchParams.get("entry.REPLACE_WITH_ENTRY_ID")).toBe(
+    expect(openedUrl.searchParams.get("entry.1674090243")).toBe(
       "https://example.com/menu",
     );
   });

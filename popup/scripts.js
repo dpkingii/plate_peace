@@ -5,8 +5,8 @@ const reportLink = document.getElementById("reportLink");
 
 // Google Form "Get pre-filled link" values for the report-a-page form.
 const REPORT_FORM_BASE_URL =
-  "https://docs.google.com/forms/d/e/REPLACE_WITH_FORM_ID/viewform";
-const REPORT_FORM_URL_ENTRY = "entry.REPLACE_WITH_ENTRY_ID";
+  "https://docs.google.com/forms/d/e/1FAIpQLSfGZIQhyQ2ppOo9sntp-HOSdMSX1LCwYJX92ed3WVsS6tvJow/viewform";
+const REPORT_FORM_URL_ENTRY = "entry.1674090243";
 
 // Soft spam guard — caps reports per rolling window. This only protects the
 // button in the popup; the form itself is a public URL reachable outside the
