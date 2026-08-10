@@ -6,77 +6,47 @@
     <title>PlatePeace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="shell">
-      <header>
-        <div class="brand">
-          <!-- Leaf + plate icon (pure SVG, no file needed) -->
-          <svg
-            class="brand-icon"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="20"
-              cy="22"
-              r="13"
-              fill="#e8f0e4"
-              stroke="#7fa688"
-              stroke-width="1.5"
-            />
-            <path
-              d="M20 9 C20 9 13 14 13 20 C13 26 20 28 20 28 C20 28 27 26 27 20 C27 14 20 9 20 9Z"
-              fill="#7fa688"
-              opacity="0.25"
-            />
-            <path
-              d="M20 10 C20 10 14.5 15 14.5 20.5 C14.5 25 20 27 20 27"
-              stroke="#4a7c5f"
-              stroke-width="1.2"
-              stroke-linecap="round"
-              fill="none"
-            />
-            <path
-              d="M20 10 C20 10 17 17 20 22"
-              stroke="#4a7c5f"
-              stroke-width="1"
-              stroke-linecap="round"
-              fill="none"
-              opacity="0.6"
-            />
+      <header class="brand">
+        <span class="brand-name">PlatePeace</span>
+
+        <button
+          class="theme-switch"
+          id="themeToggle"
+          aria-pressed="false"
+          aria-label="Toggle dark mode"
+        >
+          <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
           </svg>
-          <div class="brand-text">
-            <span class="brand-name">PlatePeace</span>
-            <span class="brand-tagline">Browse menus with ease</span>
-          </div>
-        </div>
+          <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+          </svg>
+          <span class="theme-thumb"></span>
+        </button>
       </header>
 
-      <div class="divider"></div>
-
-      <!-- Main toggle -->
-      <div class="row" id="mainRow">
-        <div class="row-text">
-          <span class="row-label">Hide calorie numbers</span>
-          <span class="row-desc" id="mainDesc">Numbers are visible</span>
-        </div>
+      <div class="power-wrap">
         <button
-          class="toggle"
+          class="power-toggle"
           id="mainToggle"
           aria-pressed="false"
           aria-label="Toggle calorie filter"
         >
-          <span class="thumb"></span>
+          <svg class="icon icon-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+          </svg>
         </button>
+        <span class="power-label" id="mainDesc">Numbers visible</span>
       </div>
-
-      <div class="divider"></div>
 
       <footer>You deserve to enjoy your food.</footer>
     </div>

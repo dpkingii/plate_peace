@@ -1,10 +1,14 @@
 const mainToggle = document.getElementById("mainToggle");
-const mainRow = document.getElementById("mainRow");
 const mainDesc = document.getElementById("mainDesc");
+const themeToggle = document.getElementById("themeToggle");
 
-// Read saved state on open and set the toggle
-chrome.storage.sync.get(["enabled"], (result) => {
+// Read saved state on open and set the toggles
+chrome.storage.sync.get(["enabled", "theme"], (result) => {
   setMainToggle(result.enabled === true);
+
+  // No saved theme yet — fall back to the OS-level preference
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  setTheme(result.theme ? result.theme === "dark" : prefersDark);
 });
 
 // Main toggle click
@@ -21,13 +25,22 @@ mainToggle.addEventListener("click", () => {
   sendToActiveTab({ type: "SET_ENABLED", enabled: newEnabled });
 });
 
+// Theme toggle click
+themeToggle.addEventListener("click", () => {
+  const newDark = themeToggle.getAttribute("aria-pressed") === "false";
+  chrome.storage.sync.set({ theme: newDark ? "dark" : "light" });
+  setTheme(newDark);
+});
+
 // Helpers
 function setMainToggle(enabled) {
   mainToggle.setAttribute("aria-pressed", String(enabled));
-  mainRow.classList.toggle("active", enabled);
-  mainDesc.textContent = enabled
-    ? "Calorie numbers are hidden"
-    : "Numbers are visible";
+  mainDesc.textContent = enabled ? "Numbers hidden" : "Numbers visible";
+}
+
+function setTheme(isDark) {
+  themeToggle.setAttribute("aria-pressed", String(isDark));
+  document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
 }
 
 // Resets when the popup closes — prevents reload loops on aggressive CDNs like Starbucks
