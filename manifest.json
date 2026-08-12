@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "QuietPlate",
+  "name": "QuietPlate - Calorie Hider",
   "version": "1.0.1",
   "description": "Browse menus peacefully. Calorie numbers are quietly tucked away.",
   "permissions": ["activeTab", "storage"],
