@@ -2,7 +2,8 @@
 
 Browse menus peacefully with the QuietPlate Chrome extension. Calorie numbers are quietly tucked away.
 
-<img width="256" alt="QuietPlate popup showing the filter turned on" src="docs/screenshot.png" />
+<img width="278" height="282" alt="image" src="https://github.com/user-attachments/assets/1de9b574-28c2-47be-851e-0307882f92d8" />
+
 
 ## What it does
 
